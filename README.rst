@@ -6,36 +6,29 @@ A simple Django app to automatically filter all model's queryset by the tenant I
 All models are required to define a foreign key field pointing to the Tenant model and
 use the Tenant Filter Manager.
 
-Mandatory settings:
-```
-TENANT_FILTER = {
-    'TENANT_FK_NAME': 'tenant',
-    'TENANT_MODEL': 'my_app.models.Tenant',
-    'TENANT_USER_MODEL': 'my_app.models.TenantUser',
-    'MODEL_EXCEPTIONS': ( )
-}
-```
+Mandatory settings::
 
-Where `my_app.models.py` is:
-```
-from django.contrib.auth.models import User
-from django.db import models
-from tenant_filter.models import TenantFilterManager
+    TENANT_FILTER = {
+        'TENANT_FK_NAME': 'tenant',
+        'TENANT_MODEL': 'my_app.models.Tenant',
+        'TENANT_USER_MODEL': 'my_app.models.TenantUser',
+        'MODEL_EXCEPTIONS': ( )
+    }
 
+Where `my_app.models.py` is::
 
-class Tenant(models.Model):
-    name = models.CharField(max_length=100)
+    from django.contrib.auth.models import User
+    from django.db import models
+    from tenant_filter.models import TenantFilterManager
     
-
-class TenantUser(models.Model):
-    user = models.OneToOneField(User)
-    tenant = models.ForeignKey(Tenant)
-    objects = TenantFilterManager()
+    class Tenant(models.Model):
+        name = models.CharField(max_length=100)    
     
-    
-class OtherModel(models.Model):
-    tenant = models.ForeignKey(Tenant)
-    objects = TenantFilterManager()
-
-```
-
+    class TenantUser(models.Model):
+        user = models.OneToOneField(User)
+        tenant = models.ForeignKey(Tenant)
+        objects = TenantFilterManager()
+        
+    class OtherModel(models.Model):
+        tenant = models.ForeignKey(Tenant)
+        objects = TenantFilterManager()
